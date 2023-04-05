@@ -64,10 +64,6 @@ public class LikeablePersonController {
     public String delete(@PathVariable("id")Long likablePersonId){
         RsData<LikeablePerson> createRsData = likeablePersonService.delete(rq.getMember(), likablePersonId);
 
-        if (createRsData.isFail()) {
-            return rq.redirectWithMsg("/likeablePerson/list",createRsData);
-        }
-
-        return rq.redirectWithMsg("/likeablePerson/list",createRsData);
+        return rq.redirectWithMsg("/likeablePerson/list", createRsData);
     }
 }
