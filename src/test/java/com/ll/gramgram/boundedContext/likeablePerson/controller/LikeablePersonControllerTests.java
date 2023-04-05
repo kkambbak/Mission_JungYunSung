@@ -167,4 +167,21 @@ public class LikeablePersonControllerTests {
                 .andExpect(redirectedUrlPattern("/likeablePerson/list**"));
         ;
     }
+
+    @Test
+    @DisplayName("다른 유저가 호감표시 삭제")
+    @WithUserDetails("user1")
+    void t007() throws Exception{
+        //When
+        ResultActions resultActions = mvc
+                .perform(get("/likeablePerson/delete/1"))
+                .andDo(print());
+
+        //Then
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("/likeablePerson/list?msg=%EB%B3%B8%EC%9D%B8%EC%9D%98+%ED%98%B8%EA%B0%90%EC%A0%95%EB%B3%B4%EB%A7%8C+%EC%82%AD%EC%A0%9C%ED%95%A0+%EC%88%98+%EC%9E%88%EC%8A%B5%EB%8B%88%EB%8B%A4.**"));
+    }
 }
