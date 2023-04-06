@@ -52,7 +52,7 @@ public class LikeablePersonService {
 
     @Transactional
     public RsData<LikeablePerson> delete(Member member, Long likeablePersonId){
-        Optional<LikeablePerson> deleteData = likeablePersonRepository.findById(Math.toIntExact(likeablePersonId));
+        Optional<LikeablePerson> deleteData = likeablePersonRepository.findById(likeablePersonId);
 
         if(member==null){
             return RsData.of("F-1", "먼저 로그인 하세요");
