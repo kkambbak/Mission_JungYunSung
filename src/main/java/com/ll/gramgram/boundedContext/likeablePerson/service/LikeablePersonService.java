@@ -54,18 +54,14 @@ public class LikeablePersonService {
     public RsData<LikeablePerson> delete(Member member, Long likeablePersonId){
         Optional<LikeablePerson> deleteData = likeablePersonRepository.findById(likeablePersonId);
 
-        if(member==null){
-            return RsData.of("F-1", "먼저 로그인 하세요");
-        }
-
         if(deleteData.isEmpty()){
             return RsData.of("F-2", "삭제하려는 호감정보가 없습니다.");
         }
-        else if(deleteData.get().getFromInstaMember().equals(member.getInstaMember())){
-            likeablePersonRepository.delete(deleteData.get());
-            return RsData.of("S-1", "%s번 호감정보가 삭제되었습니다.".formatted(likeablePersonId));
+        else if(!deleteData.get().getFromInstaMember().equals(member.getInstaMember())){
+            return RsData.of("F-3", "본인의 호감정보만 삭제할 수 있습니다.");
         }
 
-        return RsData.of("F-3", "본인의 호감정보만 삭제할 수 있습니다.");
+        likeablePersonRepository.delete(deleteData.get());
+        return RsData.of("S-1", "%s번 호감정보가 삭제되었습니다.".formatted(likeablePersonId));
     }
 }
