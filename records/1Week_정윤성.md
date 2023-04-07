@@ -226,3 +226,11 @@ security:
     1. 인자로 받은 Member의 InstaMember와 deleteData의 InstaMember가 같다면 “S-1”을 리턴
     2. 따라서, 예외처리와 성공 처리 후 남은 마지막 리턴값은 “F-3”이다. 만약 다른 예외가 있어도 지금은 다 F-3로 처리된다.
     3. 이 구조를 좀 더 깔끔하게 바꿀 수 있다면 리팩토링.
+
+---
+
+## 1주차 미션 마무리
+1. JpaRepository PK가 Integer였던 걸 Long으로 수정
+2. DeleteMapping으로 변경 및 @PreAuthroized 추가
+3. Service 로직에서 최종 리턴을 성공값으로 가독성 좋게 변경
+4. historyBack으로 잘못된 요청시 4xx로 반환
