@@ -1,4 +1,8 @@
 spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
   profiles:
     active: dev
   datasource:
@@ -10,6 +14,16 @@ spring:
     oauth2:
       client:
         registration:
+          google:
+            client-name: Google
+            client-id: 416946277743-25n2evpol7k0lmhofhst510vdched4na.apps.googleusercontent.com
+            client-secret:
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            authorization-grant-type: authorization_code
+            scope:
+              - email
+              - profile
+
           kakao:
             clientId: 9f1924f7f5eae6655b29691c6235120f
             scope:
@@ -34,6 +48,6 @@ spring:
 logging:
   level:
     root: INFO
-    com.ll.gramgram_ai: DEBUG
+    com.ll.gramgram: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
