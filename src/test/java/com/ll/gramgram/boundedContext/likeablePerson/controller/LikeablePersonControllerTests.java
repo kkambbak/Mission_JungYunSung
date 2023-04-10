@@ -183,4 +183,24 @@ public class LikeablePersonControllerTests {
                 .andExpect(handler().methodName("delete"))
                 .andExpect(status().is4xxClientError());
     }
+
+    @Test
+    @DisplayName("중복 호감표시 불가 테스트")
+    @WithUserDetails("user3")
+    void t008() throws Exception{
+        //When
+        ResultActions resultActions = mvc
+                .perform(post("/likeablePerson/add")
+                        .with(csrf()) // CSRF 키 생성
+                        .param("username", "insta_user4")
+                        .param("attractiveTypeCode", "1")
+                )
+                .andDo(print());
+
+        //Then
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("add"))
+                .andExpect(status().is4xxClientError());
+    }
 }
