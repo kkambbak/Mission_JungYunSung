@@ -41,8 +41,13 @@ public class LikeablePersonService {
                 .attractiveTypeCode(attractiveTypeCode) // 1=외모, 2=능력, 3=성격
                 .build();
 
-        if(fromInstaMember.getFromLikeablePeople().stream().anyMatch(i->i.getToInstaMember().equals(toInstaMember))){
+        if (fromInstaMember.getFromLikeablePeople().stream().anyMatch(likeablePerson1 ->
+                likeablePerson1.getToInstaMember().getId()
+                        .equals(toInstaMember.getId()))) {
             return RsData.of("F-3", "이미 등록한 상대입니다.");
+        }
+        if(fromInstaMember.getFromLikeablePeople().size() >= 10){
+            return RsData.of("F-4", "호감상대는 최대 10명까지만 등록할 수 있습니다.");
         }
 
         likeablePersonRepository.save(likeablePerson); // 저장
