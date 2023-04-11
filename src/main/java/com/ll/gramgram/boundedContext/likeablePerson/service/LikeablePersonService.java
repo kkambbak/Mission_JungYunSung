@@ -78,6 +78,9 @@ public class LikeablePersonService {
     public List<LikeablePerson> findByFromInstaMemberId(Long fromInstaMemberId) {
         return likeablePersonRepository.findByFromInstaMemberId(fromInstaMemberId);
     }
+    public Optional<LikeablePerson> findById(Long id) {
+        return likeablePersonRepository.findById(id);
+    }
 
     @Transactional
     public RsData<LikeablePerson> delete(Member member, Long likeablePersonId){
@@ -95,11 +98,13 @@ public class LikeablePersonService {
     }
 
     @Transactional
-    public RsData<LikeablePerson> modifyAttractiveTypeCode(LikeablePerson likeablePerson, int TypeCode){
+    public RsData<LikeablePerson> modifyAttractiveTypeCode(LikeablePerson likeablePerson, int newTypeCode){
+
+        String oldAttractiveTypeCodeName = likeablePerson.getAttractiveTypeDisplayName();
         //호감 수정
-        likeablePerson.changeAttractiveTypeCode(TypeCode);
+        likeablePerson.changeAttractiveTypeCode(newTypeCode);
 
         likeablePersonRepository.save(likeablePerson);
-        return RsData.of("S-2", "%s의 호감사유를 변경합니다.".formatted(likeablePerson.getToInstaMemberUsername()));
+        return RsData.of("S-2", "%s의 호감사유를 %s에서 %s로 변경합니다.".formatted(likeablePerson.getToInstaMemberUsername(), oldAttractiveTypeCodeName, likeablePerson.getAttractiveTypeDisplayName()));
     }
 }
