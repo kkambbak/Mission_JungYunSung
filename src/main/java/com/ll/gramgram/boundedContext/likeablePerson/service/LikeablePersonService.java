@@ -41,10 +41,18 @@ public class LikeablePersonService {
                 .attractiveTypeCode(attractiveTypeCode) // 1=외모, 2=능력, 3=성격
                 .build();
 
-        if (fromInstaMember.getFromLikeablePeople().stream().anyMatch(likeablePerson1 ->
-                likeablePerson1.getToInstaMember().getId()
-                        .equals(toInstaMember.getId()))) {
-            return RsData.of("F-3", "이미 등록한 상대입니다.");
+
+        Optional<LikeablePerson> opFoundLikeablePerson = findLikeablePersonMatchingToInstaMemberId(fromInstaMember.getFromLikeablePeople(), toInstaMember.getId());
+        if (opFoundLikeablePerson.isPresent()) {
+            int foundTypeCode = opFoundLikeablePerson.get().getAttractiveTypeCode();
+
+            if(foundTypeCode == likeablePerson.getAttractiveTypeCode()){
+                return RsData.of("F-3", "이미 등록한 상대입니다.");
+            }
+            else{
+                //호감표시 수정 코드
+                return modifyAttractiveTypeCode(opFoundLikeablePerson.get(), likeablePerson.getAttractiveTypeCode());
+            }
         }
         if(fromInstaMember.getFromLikeablePeople().size() >= 10){
             return RsData.of("F-4", "호감상대는 최대 10명까지만 등록할 수 있습니다.");
@@ -59,6 +67,12 @@ public class LikeablePersonService {
         toInstaMember.addToLikeablePerson(likeablePerson);
 
         return RsData.of("S-1", "입력하신 인스타유저(%s)를 호감상대로 등록되었습니다.".formatted(username), likeablePerson);
+    }
+
+    public Optional<LikeablePerson> findLikeablePersonMatchingToInstaMemberId(List<LikeablePerson> likeablePersonList, long id){
+        return likeablePersonList.stream().filter(likeablePerson1 ->
+                        likeablePerson1.getToInstaMember().getId().equals(id))
+                .findAny();
     }
 
     public List<LikeablePerson> findByFromInstaMemberId(Long fromInstaMemberId) {
@@ -78,5 +92,14 @@ public class LikeablePersonService {
 
         likeablePersonRepository.delete(deleteData.get());
         return RsData.of("S-1", "%s번 호감정보가 삭제되었습니다.".formatted(likeablePersonId));
+    }
+
+    @Transactional
+    public RsData<LikeablePerson> modifyAttractiveTypeCode(LikeablePerson likeablePerson, int TypeCode){
+        //호감 수정
+        likeablePerson.changeAttractiveTypeCode(TypeCode);
+
+        likeablePersonRepository.save(likeablePerson);
+        return RsData.of("S-2", "%s의 호감사유를 변경합니다.".formatted(likeablePerson.getToInstaMemberUsername()));
     }
 }
