@@ -1,5 +1,6 @@
 package com.ll.gramgram.boundedContext.likeablePerson.service;
 
+import com.ll.gramgram.base.initData.AppConfig;
 import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
 import com.ll.gramgram.boundedContext.instaMember.service.InstaMemberService;
@@ -7,6 +8,7 @@ import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.repository.LikeablePersonRepository;
 import com.ll.gramgram.boundedContext.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,9 @@ import java.util.Optional;
 public class LikeablePersonService {
     private final LikeablePersonRepository likeablePersonRepository;
     private final InstaMemberService instaMemberService;
+
+
+    private final long likeablePeopleMax = AppConfig.getLikeablePersonMax();
 
     @Transactional
     public RsData<LikeablePerson> like(Member member, String username, int attractiveTypeCode) {
@@ -54,8 +59,9 @@ public class LikeablePersonService {
                 return modifyAttractiveTypeCode(opFoundLikeablePerson.get(), likeablePerson.getAttractiveTypeCode());
             }
         }
-        if(fromInstaMember.getFromLikeablePeople().size() >= 10){
-            return RsData.of("F-4", "호감상대는 최대 10명까지만 등록할 수 있습니다.");
+
+        if(fromInstaMember.getFromLikeablePeople().size() >= likeablePeopleMax){
+            return RsData.of("F-4", "호감상대는 최대 %n명까지만 등록할 수 있습니다.".formatted(likeablePeopleMax));
         }
 
         likeablePersonRepository.save(likeablePerson); // 저장

@@ -52,3 +52,6 @@ logging:
     com.ll.gramgram: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
+custom:
+  likeablePerson:
+    max: 10
