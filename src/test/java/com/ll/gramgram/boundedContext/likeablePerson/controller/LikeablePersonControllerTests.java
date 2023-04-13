@@ -1,9 +1,7 @@
 package com.ll.gramgram.boundedContext.likeablePerson.controller;
 
 
-import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.repository.LikeablePersonRepository;
-import com.ll.gramgram.boundedContext.likeablePerson.service.LikeablePersonService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -158,7 +156,7 @@ public class LikeablePersonControllerTests {
     @Test
     @DisplayName("호감표시 삭제")
     @WithUserDetails("user3")
-    void t006() throws Exception{
+    void t006() throws Exception {
         //When
         ResultActions resultActions = mvc
                 .perform(
@@ -177,7 +175,7 @@ public class LikeablePersonControllerTests {
     @Test
     @DisplayName("다른 유저가 호감표시 삭제")
     @WithUserDetails("user1")
-    void t007() throws Exception{
+    void t007() throws Exception {
         //When
         ResultActions resultActions = mvc
                 .perform(delete("/likeablePerson/1").with(csrf()))
@@ -193,7 +191,7 @@ public class LikeablePersonControllerTests {
     @Test
     @DisplayName("중복 호감표시 불가 테스트")
     @WithUserDetails("user3")
-    void t008() throws Exception{
+    void t008() throws Exception {
         //When
         ResultActions resultActions = mvc
                 .perform(post("/likeablePerson/add")
@@ -209,10 +207,11 @@ public class LikeablePersonControllerTests {
                 .andExpect(handler().methodName("add"))
                 .andExpect(status().is4xxClientError());
     }
+
     @Test
     @DisplayName("11명 이상의 호감표시 실패처리")
     @WithUserDetails("user2")
-    void t009() throws Exception{
+    void t009() throws Exception {
         //Given
         for (int i = 1; i <= 10; i++) {
             mvc.perform(post("/likeablePerson/add")
@@ -236,10 +235,11 @@ public class LikeablePersonControllerTests {
                 .andExpect(handler().methodName("add"))
                 .andExpect(status().is4xxClientError());
     }
+
     @Test
     @DisplayName("기존의 사유와 다른 사유로 호감을 표시하는 경우에는 사유만 수정하고 성공으로 처리")
     @WithUserDetails("user3")
-    void t010() throws Exception{
+    void t010() throws Exception {
 
         //When
         ResultActions resultActions = mvc

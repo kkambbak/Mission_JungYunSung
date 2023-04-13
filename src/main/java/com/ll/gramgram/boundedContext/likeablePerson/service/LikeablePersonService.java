@@ -8,7 +8,6 @@ import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.repository.LikeablePersonRepository;
 import com.ll.gramgram.boundedContext.member.entity.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,7 @@ public class LikeablePersonService {
 
     @Transactional
     public RsData<LikeablePerson> like(Member member, String username, int attractiveTypeCode) {
-        if ( member.hasConnectedInstaMember() == false ) {
+        if (member.hasConnectedInstaMember() == false) {
             return RsData.of("F-2", "먼저 본인의 인스타그램 아이디를 입력해야 합니다.");
         }
 
@@ -51,16 +50,15 @@ public class LikeablePersonService {
         if (opFoundLikeablePerson.isPresent()) {
             int foundTypeCode = opFoundLikeablePerson.get().getAttractiveTypeCode();
 
-            if(foundTypeCode == likeablePerson.getAttractiveTypeCode()){
+            if (foundTypeCode == likeablePerson.getAttractiveTypeCode()) {
                 return RsData.of("F-3", "이미 등록한 상대입니다.");
-            }
-            else{
+            } else {
                 //호감표시 수정 코드
                 return modifyAttractiveTypeCode(opFoundLikeablePerson.get(), likeablePerson.getAttractiveTypeCode());
             }
         }
 
-        if(fromInstaMember.getFromLikeablePeople().size() >= likeablePeopleMax){
+        if (fromInstaMember.getFromLikeablePeople().size() >= likeablePeopleMax) {
             return RsData.of("F-4", "호감상대는 최대 %n명까지만 등록할 수 있습니다.".formatted(likeablePeopleMax));
         }
 
@@ -75,7 +73,7 @@ public class LikeablePersonService {
         return RsData.of("S-1", "입력하신 인스타유저(%s)를 호감상대로 등록되었습니다.".formatted(username), likeablePerson);
     }
 
-    public Optional<LikeablePerson> findLikeablePersonMatchingToInstaMemberId(List<LikeablePerson> likeablePersonList, long id){
+    public Optional<LikeablePerson> findLikeablePersonMatchingToInstaMemberId(List<LikeablePerson> likeablePersonList, long id) {
         return likeablePersonList.stream().filter(likeablePerson1 ->
                         likeablePerson1.getToInstaMember().getId().equals(id))
                 .findAny();
@@ -84,18 +82,18 @@ public class LikeablePersonService {
     public List<LikeablePerson> findByFromInstaMemberId(Long fromInstaMemberId) {
         return likeablePersonRepository.findByFromInstaMemberId(fromInstaMemberId);
     }
+
     public Optional<LikeablePerson> findById(Long id) {
         return likeablePersonRepository.findById(id);
     }
 
     @Transactional
-    public RsData<LikeablePerson> delete(Member member, Long likeablePersonId){
+    public RsData<LikeablePerson> delete(Member member, Long likeablePersonId) {
         Optional<LikeablePerson> deleteData = likeablePersonRepository.findById(likeablePersonId);
 
-        if(deleteData.isEmpty() || member.getInstaMember()==null){
+        if (deleteData.isEmpty() || member.getInstaMember() == null) {
             return RsData.of("F-2", "삭제하려는 호감정보가 없습니다.");
-        }
-        else if(!deleteData.get().getFromInstaMember().getId().equals(member.getInstaMember().getId())){
+        } else if (!deleteData.get().getFromInstaMember().getId().equals(member.getInstaMember().getId())) {
             return RsData.of("F-3", "본인의 호감정보만 삭제할 수 있습니다.");
         }
 
@@ -104,7 +102,7 @@ public class LikeablePersonService {
     }
 
     @Transactional
-    public RsData<LikeablePerson> modifyAttractiveTypeCode(LikeablePerson likeablePerson, int newTypeCode){
+    public RsData<LikeablePerson> modifyAttractiveTypeCode(LikeablePerson likeablePerson, int newTypeCode) {
 
         String oldAttractiveTypeCodeName = likeablePerson.getAttractiveTypeDisplayName();
         //호감 수정

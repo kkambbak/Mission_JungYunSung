@@ -62,7 +62,7 @@ public String delete(@PathVariable("id")Long likablePersonId){
 }
 ```
 
- likeablePersonService.delete(likablePersonId) 메소드로 RsData를 만든다.
+likeablePersonService.delete(likablePersonId) 메소드로 RsData를 만든다.
 
 rq를 통해 성공, 삭제 resultCode와 메시지를 전달한다.
 
@@ -214,9 +214,9 @@ security:
         1. 서비스 단에서 처리하는 일들 테스트 추가
     2. MockMVC로 테스트를 하는데, 만약 view나 status말고 다른 부분으로 파악해야 한다면?
     3. 구글 로그인은 어떻게 테스트 해야 하는지 잘 모르겠다.
-    
+
 2. 구글 로그인
-    1. 카카오 로그인은  Client-ID에 키만 입력해주어도 동작하였다.
+    1. 카카오 로그인은 Client-ID에 키만 입력해주어도 동작하였다.
     2. 구글 로그인은 id와 secret 둘 다 입력해주어야 했다. 그 이유는?
 
 ## Refactoring
@@ -230,6 +230,7 @@ security:
 ---
 
 ## 1주차 미션 마무리
+
 1. JpaRepository PK가 Integer였던 걸 Long으로 수정
 2. DeleteMapping으로 변경 및 @PreAuthroized 추가
 3. Service 로직에서 최종 리턴을 성공값으로 가독성 좋게 변경

@@ -33,7 +33,7 @@
 
    like메소드 내에서 다음을 추가하였다.
 
-   getFromlikeablePeople()로 가져온 리스트에서  toInstaMember가 같은 것이 있는지 anyMatch로 체크한 후  True 일경우 F-3으로 처리.
+   getFromlikeablePeople()로 가져온 리스트에서 toInstaMember가 같은 것이 있는지 anyMatch로 체크한 후 True 일경우 F-3으로 처리.
 
 2. 케이스 5: 11명이상의 호감상대 등록x
 
@@ -137,8 +137,8 @@
 
    단순 숫자10이었던 것을 다음처럼 변경
 
-
 **[특이사항]**
 
 구현 과정에서 아쉬웠던 점 / 궁금했던 점을 정리합니다.
+
 - like 메소드가 좀 많이 복잡해진 것 같아서 빼낼 수 있는 부분은 따로 또 빼내야 되지 싶다.

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,7 @@ class LikeablePersonServiceTest {
 
     @Test
     @DisplayName("기존의 사유와 다른 사유로 호감을 표시하는 경우에는 사유만 수정하고 성공으로 처리")
-    void t001() throws Exception{
+    void t001() throws Exception {
         //given
         InstaMember instaMember = likeablePersonService.findById(1L).get().getFromInstaMember();
         Member member = Member.builder().username("user3").password("1234").instaMember(instaMember).build();
