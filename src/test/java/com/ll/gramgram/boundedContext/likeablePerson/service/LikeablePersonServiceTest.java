@@ -1,7 +1,9 @@
 package com.ll.gramgram.boundedContext.likeablePerson.service;
 
 import com.ll.gramgram.base.initData.AppConfig;
+import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
+import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.member.entity.Member;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -27,10 +29,11 @@ class LikeablePersonServiceTest {
         likeablePersonService.like(member, "insta_user4", 1);
 
         //When
-        likeablePersonService.like(member, "insta_user4", 2);
+        RsData<LikeablePerson> likeRsData = likeablePersonService.like(member, "insta_user4", 2);
 
         //Then
         Assertions.assertThat(likeablePersonService.findById(1L).get().getAttractiveTypeCode()).isEqualTo(2);
+        Assertions.assertThat(likeRsData.getResultCode()).isEqualTo("S-2");
     }
 
     @Test
