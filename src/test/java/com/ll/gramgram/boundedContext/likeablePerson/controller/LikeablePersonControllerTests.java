@@ -1,6 +1,8 @@
 package com.ll.gramgram.boundedContext.likeablePerson.controller;
 
 
+import com.ll.gramgram.boundedContext.likeablePerson.repository.LikeablePersonRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LikeablePersonControllerTests {
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private LikeablePersonRepository likeablePersonRepository;
 
     @Test
     @DisplayName("등록 폼(인스타 인증을 안해서 폼 대신 메세지)")
@@ -152,7 +156,7 @@ public class LikeablePersonControllerTests {
     @Test
     @DisplayName("호감표시 삭제")
     @WithUserDetails("user3")
-    void t006() throws Exception{
+    void t006() throws Exception {
         //When
         ResultActions resultActions = mvc
                 .perform(
@@ -171,7 +175,7 @@ public class LikeablePersonControllerTests {
     @Test
     @DisplayName("다른 유저가 호감표시 삭제")
     @WithUserDetails("user1")
-    void t007() throws Exception{
+    void t007() throws Exception {
         //When
         ResultActions resultActions = mvc
                 .perform(delete("/likeablePerson/1").with(csrf()))
@@ -182,5 +186,74 @@ public class LikeablePersonControllerTests {
                 .andExpect(handler().handlerType(LikeablePersonController.class))
                 .andExpect(handler().methodName("delete"))
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @DisplayName("중복 호감표시 불가 테스트")
+    @WithUserDetails("user3")
+    void t008() throws Exception {
+        //When
+        ResultActions resultActions = mvc
+                .perform(post("/likeablePerson/add")
+                        .with(csrf()) // CSRF 키 생성
+                        .param("username", "insta_user4")
+                        .param("attractiveTypeCode", "1")
+                )
+                .andDo(print());
+
+        //Then
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("add"))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @DisplayName("11명 이상의 호감표시 실패처리")
+    @WithUserDetails("user2")
+    void t009() throws Exception {
+        //Given
+        for (int i = 1; i <= 10; i++) {
+            mvc.perform(post("/likeablePerson/add")
+                    .with(csrf()) // CSRF 키 생성
+                    .param("username", "new_insta_user" + i)
+                    .param("attractiveTypeCode", "1")
+            );
+        }
+
+        //When
+        ResultActions resultActions = mvc
+                .perform(post("/likeablePerson/add")
+                        .with(csrf()) // CSRF 키 생성
+                        .param("username", "new_insta_user11")
+                        .param("attractiveTypeCode", "1")
+                )
+                .andDo(print());
+        //Then
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("add"))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @DisplayName("기존의 사유와 다른 사유로 호감을 표시하는 경우에는 사유만 수정하고 성공으로 처리")
+    @WithUserDetails("user3")
+    void t010() throws Exception {
+
+        //When
+        ResultActions resultActions = mvc
+                .perform(post("/likeablePerson/add")
+                        .with(csrf()) // CSRF 키 생성
+                        .param("username", "insta_user4")
+                        .param("attractiveTypeCode", "2")
+                )
+                .andDo(print());
+        //Then
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("add"))
+                .andExpect(status().is3xxRedirection());
+        Assertions.assertThat(likeablePersonRepository.findById(1L).get().getAttractiveTypeCode()).isEqualTo(2);
     }
 }
