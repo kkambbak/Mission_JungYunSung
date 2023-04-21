@@ -154,7 +154,7 @@ public class LikeablePersonControllerTests {
     }
 
     @Test
-    @DisplayName("호감표시 삭제")
+    @DisplayName("호감표시 취소")
     @WithUserDetails("user3")
     void t006() throws Exception {
         //When
@@ -167,13 +167,13 @@ public class LikeablePersonControllerTests {
         //Then
         resultActions
                 .andExpect(handler().handlerType(LikeablePersonController.class))
-                .andExpect(handler().methodName("delete"))
+                .andExpect(handler().methodName("cancel"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("/likeablePerson/list**"));
     }
 
     @Test
-    @DisplayName("다른 유저가 호감표시 삭제")
+    @DisplayName("다른 유저가 호감표시 취소")
     @WithUserDetails("user1")
     void t007() throws Exception {
         //When
@@ -184,7 +184,7 @@ public class LikeablePersonControllerTests {
         //Then
         resultActions
                 .andExpect(handler().handlerType(LikeablePersonController.class))
-                .andExpect(handler().methodName("delete"))
+                .andExpect(handler().methodName("cancel"))
                 .andExpect(status().is4xxClientError());
     }
 
