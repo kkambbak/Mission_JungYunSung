@@ -33,7 +33,7 @@ class LikeablePersonServiceTest {
 
         //Then
         Assertions.assertThat(likeablePersonService.findById(1L).get().getAttractiveTypeCode()).isEqualTo(2);
-        Assertions.assertThat(likeRsData.getResultCode()).isEqualTo("S-2");
+        Assertions.assertThat(likeRsData.getResultCode()).isEqualTo("S-3");
     }
 
     @Test
