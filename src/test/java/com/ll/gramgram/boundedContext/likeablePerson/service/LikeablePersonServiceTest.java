@@ -1,6 +1,6 @@
 package com.ll.gramgram.boundedContext.likeablePerson.service;
 
-import com.ll.gramgram.base.initData.AppConfig;
+import com.ll.gramgram.base.appConfig.AppConfig;
 import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
 import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
@@ -39,7 +39,7 @@ class LikeablePersonServiceTest {
     @Test
     @DisplayName("설정 파일에 있는 최대 호감 표시 수 가져오기")
     void t002() throws Exception {
-        long likeablePersonMax = AppConfig.getLikeablePersonMax();
+        long likeablePersonMax = AppConfig.getLikeablePersonFromMax();
 
         Assertions.assertThat(likeablePersonMax).isEqualTo(10);
     }
