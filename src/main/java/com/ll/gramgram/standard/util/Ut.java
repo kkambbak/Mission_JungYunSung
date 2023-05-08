@@ -1,5 +1,8 @@
 package com.ll.gramgram.standard.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,8 +12,20 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Map;
 
 public class Ut {
+
+    public static class json {
+
+        public static String toStr(Map map) {
+            try {
+                return new ObjectMapper().writeValueAsString(map);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
     public static class reflection {
         public static boolean setFieldValue(Object o, String fieldName, Object value) {
             Field field = null;

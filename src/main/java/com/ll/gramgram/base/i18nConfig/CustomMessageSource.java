@@ -1,6 +1,7 @@
 package com.ll.gramgram.base.i18nConfig;
 
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +22,9 @@ public class CustomMessageSource extends ResourceBundleMessageSource {
         return replaceVariableToString(super.resolveCodeWithoutArguments(code, locale), locale);
     }
 
-    private String replaceVariableToString(String code, Locale locale) {
-        StringBuffer result = new StringBuffer();
+    @Cacheable(cacheNames = "translation", key = "#code + ',' + #locale")
+    public String replaceVariableToString(String code, Locale locale) {
+        StringBuilder result = new StringBuilder();
         Matcher matcher = VARIABLE_PATTERN.matcher(code);
 
         while (matcher.find()) {
