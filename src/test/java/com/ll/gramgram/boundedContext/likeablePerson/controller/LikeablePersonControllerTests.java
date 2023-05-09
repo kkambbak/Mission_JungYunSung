@@ -24,6 +24,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -391,4 +392,24 @@ public class LikeablePersonControllerTests {
 //
 //        assertThat(newAttractiveTypeCode).isEqualTo(2);
 //    }
+
+    @Test
+    @DisplayName("호감리스트 성별로 필터링")
+    @WithUserDetails("user4")
+    public void t014() throws Exception{
+
+        //when
+        ResultActions resultActions = mvc
+                .perform(get("/usr/likeablePerson/toList?gender=M&attractiveTypeCode=&sortCode=1")
+                )
+                .andDo(print());
+
+        //then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(view().name("usr/likeablePerson/toList"))
+                .andExpect(model().attributeExists("likeablePeople")) // "likeablePeople"가 존재하는지 확인
+                .andExpect(model().attribute("likeablePeople", hasSize(3))) //  "likeablePeople"의 크기가 3인지 확인
+        ;
+    }
 }
