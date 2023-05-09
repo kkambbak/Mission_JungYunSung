@@ -203,7 +203,7 @@ public class LikeablePersonServiceTests {
         WHERE l1_0.from_insta_member_id = 2
         AND t1_0.username = "insta_user100";
         */
-        LikeablePerson likeablePerson = likeablePersonRepository.findByFromInstaMemberIdAndToInstaMember_username(2L, "insta_user100");
+        LikeablePerson likeablePerson = likeablePersonRepository.findByFromInstaMemberIdAndToInstaMember_username(3L, "insta_user100");
 
         assertThat(likeablePerson.getId()).isEqualTo(2);
     }
@@ -213,7 +213,7 @@ public class LikeablePersonServiceTests {
     void t005() throws Exception {
         LikeablePerson likeablePerson = likeablePersonRepository.findQslByFromInstaMemberIdAndToInstaMember_username(2L, "insta_user4").orElse(null);
 
-        assertThat(likeablePerson.getId()).isEqualTo(1L);
+        assertThat(likeablePerson.getId()).isEqualTo(4L);
     }
 
     @Test

@@ -49,6 +49,7 @@ public class NotProd {
                 Member memberUser6 = memberService.join("user6", "1234").getData();
                 Member memberUser7 = memberService.join("user7", "1234").getData();
                 Member memberUser8 = memberService.join("user8", "1234").getData();
+                Member memberUser9 = memberService.join("user9", "1234").getData();
 
                 Member memberUser9ByKakao = memberService.whenSocialLogin("KAKAO", "KAKAO__%s".formatted(kakaoDevUserOAuthId)).getData();
                 Member memberUser10ByGoogle = memberService.whenSocialLogin("GOOGLE", "GOOGLE__%s".formatted(googleDevUserOAuthId)).getData();

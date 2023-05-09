@@ -45,7 +45,7 @@ public class LikeablePersonControllerTests {
 
     @Test
     @DisplayName("등록 폼(인스타 인증을 안해서 폼 대신 메세지)")
-    @WithUserDetails("user1")
+    @WithUserDetails("user9")
     void t001() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
@@ -410,6 +410,46 @@ public class LikeablePersonControllerTests {
                 .andExpect(view().name("usr/likeablePerson/toList"))
                 .andExpect(model().attributeExists("likeablePeople")) // "likeablePeople"가 존재하는지 확인
                 .andExpect(model().attribute("likeablePeople", hasSize(3))) //  "likeablePeople"의 크기가 3인지 확인
+        ;
+    }
+
+    @Test
+    @DisplayName("호감리스트 호감사유로 필터링")
+    @WithUserDetails("user4")
+    public void t015() throws Exception{
+
+        //when
+        ResultActions resultActions = mvc
+                .perform(get("/usr/likeablePerson/toList?gender=&attractiveTypeCode=3&sortCode=1")
+                )
+                .andDo(print());
+
+        //then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(view().name("usr/likeablePerson/toList"))
+                .andExpect(model().attributeExists("likeablePeople")) // "likeablePeople"가 존재하는지 확인
+                .andExpect(model().attribute("likeablePeople", hasSize(4))) //  "likeablePeople"의 크기가 3인지 확인
+        ;
+    }
+
+    @Test
+    @DisplayName("호감리스트 성별,호감사유로 필터링")
+    @WithUserDetails("user4")
+    public void t016() throws Exception{
+
+        //when
+        ResultActions resultActions = mvc
+                .perform(get("/usr/likeablePerson/toList?gender=M&attractiveTypeCode=3&sortCode=1")
+                )
+                .andDo(print());
+
+        //then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(view().name("usr/likeablePerson/toList"))
+                .andExpect(model().attributeExists("likeablePeople")) // "likeablePeople"가 존재하는지 확인
+                .andExpect(model().attribute("likeablePeople", hasSize(1))) //  "likeablePeople"의 크기가 3인지 확인
         ;
     }
 }
