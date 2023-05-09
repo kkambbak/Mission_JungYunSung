@@ -78,6 +78,13 @@ public class NotProd {
                 likeablePersonService.like(memberUser6, "insta_user4", 3).getData();
                 likeablePersonService.like(memberUser7, "insta_user4", 3).getData();
                 likeablePersonService.like(memberUser8, "insta_user4", 3).getData();
+
+                likeablePersonService.like(memberUser8, "insta_user2", 3).getData();
+                likeablePersonService.like(memberUser7, "insta_user2", 3).getData();
+                likeablePersonService.like(memberUser6, "insta_user2", 3).getData();
+                likeablePersonService.like(memberUser8, "insta_user3", 3).getData();
+                likeablePersonService.like(memberUser7, "insta_user3", 3).getData();
+                likeablePersonService.like(memberUser7, "insta_user1", 3).getData();
             }
         };
     }

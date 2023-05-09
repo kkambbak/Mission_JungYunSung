@@ -1,5 +1,6 @@
 package com.ll.gramgram.boundedContext.likeablePerson.controller;
 
+import com.ll.gramgram.base.baseEntity.BaseEntity;
 import com.ll.gramgram.base.rq.Rq;
 import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
@@ -15,9 +16,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static java.util.Comparator.reverseOrder;
 
 @Controller
 @RequestMapping("/usr/likeablePerson")
@@ -145,6 +149,32 @@ public class LikeablePersonController {
                 likeablePeople = likeablePeople.stream()
                         .filter(p -> p.getAttractiveTypeCode() == attractiveTypeCode)
                         .collect(Collectors.toList());
+            }
+
+            if (sortCode != null){
+                switch (sortCode){
+                    case 1:
+                        likeablePeople.sort(Comparator.comparing(BaseEntity::getModifyDate));
+                        break;
+                    case 2:
+                        likeablePeople.sort(Comparator.comparing(BaseEntity::getModifyDate).reversed());
+                        break;
+                    case 3:
+                        //인기 많은순
+                        likeablePeople.sort(Comparator.comparing((LikeablePerson p) -> p.getFromInstaMember().getLikes()).reversed());
+                        break;
+                    case 4:
+                        //인기 적은순
+                        likeablePeople.sort(Comparator.comparing(p->p.getFromInstaMember().getLikes()));
+                        break;
+                    case 5:
+                        likeablePeople.sort(Comparator.comparing(p->p.getFromInstaMember().getGender()));
+                        break;
+                    case 6:
+                        likeablePeople.sort(Comparator.comparing(LikeablePerson::getAttractiveTypeCode));
+                        break;
+                }
+
             }
 
             model.addAttribute("likeablePeople", likeablePeople);
