@@ -1,6 +1,7 @@
 package com.ll.gramgram.boundedContext.likeablePerson.service;
 
 import com.ll.gramgram.base.appConfig.AppConfig;
+import com.ll.gramgram.base.baseEntity.BaseEntity;
 import com.ll.gramgram.base.event.EventAfterLike;
 import com.ll.gramgram.base.event.EventAfterModifyAttractiveType;
 import com.ll.gramgram.base.event.EventBeforeCancelLike;
@@ -17,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -221,5 +224,47 @@ public class LikeablePersonService {
 
 
         return RsData.of("S-1", "호감표시취소가 가능합니다.");
+    }
+
+    public List<LikeablePerson> filterAndSortLikeablePeople(InstaMember instaMember, String gender, int attractiveTypeCode, int sortCode) {
+
+        List<LikeablePerson> likeablePeople = instaMember.getToLikeablePeople();
+
+        if (!gender.isEmpty()){
+            likeablePeople = likeablePeople.stream()
+                    .filter(p -> p.getFromInstaMember().getGender().equals(gender))
+                    .collect(Collectors.toList());
+        }
+
+        if (attractiveTypeCode != 0){
+            likeablePeople = likeablePeople.stream()
+                    .filter(p -> p.getAttractiveTypeCode() == attractiveTypeCode)
+                    .collect(Collectors.toList());
+        }
+
+        if (sortCode != 0){
+            switch (sortCode){
+                case 2:
+                    likeablePeople.sort(Comparator.comparing(LikeablePerson::getId));
+                    break;
+                case 3:
+                    //인기 많은순
+                    likeablePeople.sort(Comparator.comparing((LikeablePerson p) -> p.getFromInstaMember().getLikes()).reversed());
+                    break;
+                case 4:
+                    //인기 적은순
+                    likeablePeople.sort(Comparator.comparing(p->p.getFromInstaMember().getLikes()));
+                    break;
+                case 5:
+                    likeablePeople.sort(Comparator.comparing((LikeablePerson p) ->p.getFromInstaMember().getGender()).reversed());
+                    break;
+                case 6:
+                    likeablePeople.sort(Comparator.comparing(LikeablePerson::getAttractiveTypeCode)
+                            .thenComparing(Comparator.comparing(LikeablePerson::getId).reversed()));
+                    break;
+            }
+
+        }
+        return likeablePeople;
     }
 }
