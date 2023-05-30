@@ -3,6 +3,10 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.session.SessionAutoConfiguration
   profiles:
     active: dev
     include: secret
@@ -66,7 +70,13 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
-logging:
+autoconfigure:
+  exclude=org:
+    springframework:
+      boot:
+        autoconfigure:
+          session:
+            SessionAutoConfiguration:logging:
   level:
     root: INFO
     com.ll.gramgram: DEBUG
